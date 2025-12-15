@@ -20,23 +20,45 @@ const App = () => {
   }
 
   const [votes, setVotes] = useState(Array(8).fill(0))
+  const [highestVote, setHighestVote] = useState(0)
 
   const handleVote = () => {
     const copy = [...votes]
     copy[selected] += 1
     setVotes(copy)
+
+    let maxIdx = 0
+
+    for (let i = 0; i <= 8; i++) {
+      console.log("babushka")
+      if (copy[i] > copy[maxIdx]) {
+        maxIdx = i
+      }
+    }
+
+    setHighestVote(maxIdx)
+    console.log(maxIdx)
   }
+
+  
 
   return (
     <div>
-      <h1>{anecdotes[selected]}</h1>
-      <h1>has {votes[selected]} votes</h1>
+      <div>
+        <h1>{anecdotes[selected]}</h1>
+        <h1>has {votes[selected]} votes</h1>
 
-      <button onClick={handleVote}>Vote</button>
+        <button onClick={handleVote}>Vote</button>
 
-      <button onClick={randomSelection}>
-        Next Anecdote
-      </button>
+        <button onClick={randomSelection}>
+          Next Anecdote
+        </button>
+      </div>
+
+      <div>
+        <h1>{anecdotes[highestVote]}</h1>
+        <h1>has {votes[highestVote]} votes</h1>
+      </div>
     </div>
   )
 }
