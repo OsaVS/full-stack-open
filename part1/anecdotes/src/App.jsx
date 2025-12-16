@@ -30,14 +30,12 @@ const App = () => {
     let maxIdx = 0
 
     for (let i = 0; i <= 8; i++) {
-      console.log("babushka")
       if (copy[i] > copy[maxIdx]) {
         maxIdx = i
       }
     }
 
     setHighestVote(maxIdx)
-    console.log(maxIdx)
   }
 
   
