@@ -41,7 +41,22 @@ const App = () => {
     }
 
     if (persons.some(person => person.name.toLowerCase() === newName.toLowerCase())) {
-      alert(`${newName} is already added to phonebook`)
+      if (confirm(`"${newName}" is already added to phonebook, replace the old number with a new one?`)){
+        const personToUpdate = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
+        const updatedPerson = { ...personToUpdate, number: newNumber }
+
+        personService
+          .updateNumber(personToUpdate.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            alert(`The contact '${personToUpdate.name}' was already deleted from server`)
+            setPersons(persons.filter(person => person.id !== personToUpdate.id))
+          })
+      }
       return
     }
 
@@ -65,6 +80,17 @@ const App = () => {
         person.name.toLowerCase().includes(filterName.toLowerCase())
       )
 
+  const handleDelete = (id) => {
+    if (!window.confirm('Are you sure you want to delete this contact?')) {
+      return
+    }
+
+    personService
+      .deletePerson(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+  }
 
   return (
     <div>
@@ -83,7 +109,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons persons={contactsToShow} />
+      <Persons persons={contactsToShow} handleDelete={handleDelete}/>
     </div>
   )
 }
