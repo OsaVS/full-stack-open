@@ -2,16 +2,17 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import axios from 'axios'
+import personService from './services/personService'
+
 
 const App = () => {
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -44,13 +45,18 @@ const App = () => {
       return
     }
 
-    setPersons(persons.concat({
+    const newPerson = {
       name: newName,
-      number: newNumber
-    }))
+      number: newNumber,
+    }
 
-    setNewName('')
-    setNewNumber('')
+    personService
+      .create(newPerson)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const contactsToShow = filterName === ''
