@@ -4,7 +4,7 @@ const Persons = ({persons, handleDelete}) => {
             {persons.map(
                 person => (
                     <p key={person.id}>
-                        {person.name} {person.number} <button onClick={() => handleDelete(person.id)}>delete</button> 
+                        {person.name} {person.number} <button onClick={() => handleDelete(person)}>delete</button> 
                     </p>
                 )
             )}

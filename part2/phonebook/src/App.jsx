@@ -20,7 +20,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState({message: '', type: ''})
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -53,13 +53,23 @@ const App = () => {
             setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedPerson))
             setNewName('')
             setNewNumber('')
-            setNotification(`Updated ${returnedPerson.name}'s number`)
+
+            setNotification({
+              message: `Updated ${returnedPerson.name}'s number`, 
+              type:'success'
+            })
             setTimeout(() => {
-              setNotification('')
+              setNotification({message: '', type: ''})
             }, 5000)
           })
           .catch(error => {
-            alert(`The contact '${personToUpdate.name}' was already deleted from server`)
+            setNotification({
+              message: `Information of '${newName}' has already been removed from server`, 
+              type:'error'
+            })
+            setTimeout(() => {
+              setNotification({message: '', type: ''})
+            }, 5000)
             setPersons(persons.filter(person => person.id !== personToUpdate.id))
           })
       }
@@ -78,9 +88,12 @@ const App = () => {
         setNewName('')
         setNewNumber('')
 
-        setNotification(`Added ${returnedPerson.name}`)
+        setNotification({
+          message: `Added ${returnedPerson.name}`, 
+          type:'success'
+        })
         setTimeout(() => {
-          setNotification('')
+          setNotification({message: '', type: ''})
         }, 5000)
       })
   }
@@ -91,15 +104,24 @@ const App = () => {
         person.name.toLowerCase().includes(filterName.toLowerCase())
       )
 
-  const handleDelete = (id) => {
+  const handleDelete = (contact) => {
     if (!window.confirm('Are you sure you want to delete this contact?')) {
       return
     }
 
     personService
-      .deletePerson(id)
+      .deletePerson(contact.id)
       .then(() => {
-        setPersons(persons.filter(person => person.id !== id))
+        setPersons(persons.filter(person => person.id !== contact.id))
+      })
+      .catch(error => {
+        setNotification({
+          message: `Information of '${contact.name}' has already been removed from server`, 
+          type:'error'})
+        setTimeout(() => {
+          setNotification({message: '', type: ''})
+        }, 5000)
+        setPersons(persons.filter(person => person.id !== contact.id))
       })
   }
 
@@ -107,7 +129,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      {notification && <Notification message={notification} />}
+      {notification.message && <Notification message={notification.message} type={notification.type}/>}
 
       <Filter onChange={handleFilterNameChange} value={filterName} />
 
