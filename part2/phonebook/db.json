@@ -13,7 +13,17 @@
     {
       "id": "ed4a",
       "name": "hans zimmer",
+      "number": "0713333333"
+    },
+    {
+      "id": "1b4e",
+      "name": "Maximus Decimus Meridius",
       "number": "0801111111"
+    },
+    {
+      "id": "6f40",
+      "name": "Anthony Horowitz",
+      "number": "0102222222"
     }
   ]
 }

@@ -3,6 +3,7 @@ import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import personService from './services/personService'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [notification, setNotification] = useState('')
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -51,6 +53,10 @@ const App = () => {
             setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedPerson))
             setNewName('')
             setNewNumber('')
+            setNotification(`Updated ${returnedPerson.name}'s number`)
+            setTimeout(() => {
+              setNotification('')
+            }, 5000)
           })
           .catch(error => {
             alert(`The contact '${personToUpdate.name}' was already deleted from server`)
@@ -71,6 +77,11 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+
+        setNotification(`Added ${returnedPerson.name}`)
+        setTimeout(() => {
+          setNotification('')
+        }, 5000)
       })
   }
 
@@ -95,6 +106,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      {notification && <Notification message={notification} />}
 
       <Filter onChange={handleFilterNameChange} value={filterName} />
 
