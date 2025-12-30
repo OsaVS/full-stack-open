@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import countryService from './services/countryService'
+import Country from './components/country'
 
 const App = () => {
   const [countries, setCountries] = useState([])
@@ -40,22 +41,7 @@ const App = () => {
             ? 'Too many matches, specify another filter'
             : filteredCountries.length === 1
               ? (
-                <div>
-                  <h2>{filteredCountries[0].name.common}</h2>
-                  <p>Capital: {filteredCountries[0].capital}</p>
-                  <p>Population: {filteredCountries[0].population}</p>
-                  <h3>Languages:</h3>
-                  <ul>
-                    {Object.values(filteredCountries[0].languages).map(language => (
-                      <li key={language}>{language}</li>
-                    ))}
-                  </ul>
-                  <img 
-                    src={filteredCountries[0].flags.png} 
-                    alt={`Flag of ${filteredCountries[0].name.common}`} 
-                    width="200"
-                  />
-                </div>
+                  <Country country={filteredCountries[0]} />
               )
               : (
                   <div>
