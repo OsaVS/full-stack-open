@@ -47,7 +47,7 @@ const App = () => {
                   <div>
                     {filteredCountries.map(country => (
                       <div key={country.name.common}>
-                        {country.name.common}
+                        {country.name.common} <button onClick={() => setNameFilter(country.name.common)}>show</button>
                       </div>
                     ))}
                   </div>
