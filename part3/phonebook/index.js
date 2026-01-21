@@ -1,8 +1,12 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const app = express();
+
+app.use(cors());
 app.use(express.json());
+
 
 
 morgan.token('body', (req) => {
@@ -84,7 +88,7 @@ app.post('/api/persons',(req, res) => {
 
   persons = persons.concat(person)
 
-  res.json(persons)
+  res.json(person)
 })
 
 const generateId = () => {
