@@ -7,7 +7,7 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2]
 
-const url = `mongodb+srv://ovs:${password}@full-stack-open.3lgpcij.mongodb.net/?appName=full-stack-open`
+const url = `mongodb+srv://<db_name>:${password}@full-stack-open.3lgpcij.mongodb.net/?appName=full-stack-open`
 
 mongoose.set('strictQuery', false)
 
