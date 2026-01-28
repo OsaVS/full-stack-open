@@ -96,6 +96,16 @@ const App = () => {
           setNotification({message: '', type: ''})
         }, 5000)
       })
+      .catch(error => {
+        setNotification({
+          message: error.response?.data?.error,
+          type: 'error'
+        })
+        setTimeout(() => {
+          setNotification({message: '', type: ''})
+        }, 5000)
+        console.log(error.response?.data?.error)
+      })
   }
 
   const contactsToShow = filterName === ''

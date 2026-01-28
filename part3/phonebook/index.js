@@ -73,28 +73,17 @@ app.post('/api/persons',(req, res, next) => {
       error:"Content Missing"
     }))
   }
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  })
 
-  Person.find({ name: {$regex: body.name, $options: 'i'}})
+  person.save()
         .then(result => {
-          if (result.length > 0) {
-              return (res.status(409).json({
-                error:"name must be unique"
-              }))
-          }
-          const person = new Person({
-            name: body.name,
-            number: body.number,
-          })
-
-          person.save()
-            .then(result => {
-              console.log('person added successfully')
-              res.json(result)
-            })
+          console.log('person added successfully')
+          res.json(result)
         })
-        .catch(error => {
-          next(error)
-        })
+        .catch(error => {next(error)})
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -132,7 +121,9 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   } 
-
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({error: error.message})
+  }
   next(error)
 }
 
